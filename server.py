@@ -19,3 +19,5 @@ class Server:
 
 if __name__ == "__main__":
     server = Server(socket.socket(), "", 3456)
+
+    server.run()
