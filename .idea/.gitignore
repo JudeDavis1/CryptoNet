@@ -6,3 +6,8 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/CryptoNet.iml
+/inspectionProfiles/
+/misc.xml
+/modules.xml
+/vcs.xml
