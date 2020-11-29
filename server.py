@@ -1,6 +1,14 @@
-import log
+'''
+
+TODO:
+- Make server multi-threaded and run on parallel
+- Add cipher key exchange
+
+'''
+
+import sys
+import logger
 import socket
-import threading
 
 
 class Server:
@@ -20,8 +28,14 @@ class Server:
 
 
 if __name__ == "__main__":
-    log.info("Started running")
+    logger.INFO("Started running")
+    
     server = Server(socket.socket(), "", 3456)
-    thread = threading.Thread(target=server.run)
-
-    thread.start()
+    
+    try:
+        server.run()
+    except KeyboardInterrupt:
+        print("\n")
+        logger.INFO("Exiting...\n\n")
+        server.sock.close()
+        sys.exit(1)
