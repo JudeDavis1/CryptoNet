@@ -9,6 +9,7 @@ TODO:
 import sys
 import logger
 import socket
+import ciphers
 
 
 class Server:
@@ -17,6 +18,7 @@ class Server:
         self.sock = sock
         self.host = host
         self.port = port
+        self.cipherHandler = ciphers.CipherHandler()
 
 
     def run(self):
@@ -25,6 +27,11 @@ class Server:
 
         while True:
             c, addr = self.sock.accept()  # retrieve connection and address when a connection is initialized
+            ch = ciphers.CipherHandler()  # object used to encrypt and decrypt data
+
+            ch.keypair_gen()
+
+            c.send(f"KEY:{ch.public_key}".encode("utf-8"))
 
 
 if __name__ == "__main__":

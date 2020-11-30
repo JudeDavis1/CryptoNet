@@ -3,7 +3,7 @@ import random
 
 class CipherHandler:
 
-    def __init__(self, p, q):
+    def __init__(self, random_prime=True, p=0, q=0):
         self.p = p
         self.q = q
         self.public_key = None
@@ -11,15 +11,20 @@ class CipherHandler:
         self.plaintext = None
         self.ciphertext = None
 
+        # keep generating a random number until it is prime
+        if random_prime:
+            while not self._is_prime(self.p) or not self._is_prime(self.q) and self.q == self.q:
+                self.p = random.randint(100, 500)
+                self.q = random.randint(100, 500)
+
     # greatest common divisor
-    def GCD(self, a, b):
+    def _GCD(self, a, b):
         while b != 0:
             a, b = b, a % b
         return a
 
-
     # checks if number is a prime number
-    def is_prime(self, n):
+    def _is_prime(self, n):
         if n == 2:
             return True
         if n < 2 or n % 2 == 0:
@@ -31,7 +36,7 @@ class CipherHandler:
 
         return True
 
-    def modulo_inverse(self, a, m):
+    def _modulo_inverse(self, a, m):
         a = a % m
         for i in range(1, m):
             if (a * i) % m == 1:
@@ -43,7 +48,7 @@ class CipherHandler:
         p = self.p
         q = self.q
 
-        if not (self.is_prime(p) and self.is_prime(q)):
+        if not (self._is_prime(p) and self._is_prime(q)):
             raise ValueError("Both numbers have to be prime.")
         elif p == q:
             raise ValueError("Both numbers cannot be equal.")
@@ -51,13 +56,13 @@ class CipherHandler:
         N = p * q  # N = pq
         phi = (p - 1) * (q - 1)  # phi is the totient of n
         e = random.randrange(1, phi)
-        g = self.GCD(e, phi)
+        g = self._GCD(e, phi)
 
         while g != 1:
             e = random.randrange(1, phi)
-            g = self.GCD(e, phi)
+            g = self._GCD(e, phi)
 
-        d = self.modulo_inverse(e, phi)
+        d = self._modulo_inverse(e, phi)
         # ((public key), (private key))
         self.public_key = (e, N)
         self.private_key = (d, N)
