@@ -13,9 +13,15 @@ class CipherHandler:
 
         # keep generating a random number until it is prime
         if random_prime:
-            while not self._is_prime(self.p) or not self._is_prime(self.q) and self.q == self.q:
+            while not self._is_prime(self.p) or not self._is_prime(self.q):
                 self.p = random.randint(100, 500)
-                self.q = random.randint(100, 500)
+                self.q = random.randint(100, 600)
+
+                if self.p == self.q:
+                    self.__init__()
+
+        # print("PQ == {} {}".format(self.p, self.q))
+
 
     # greatest common divisor
     def _GCD(self, a, b):
