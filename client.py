@@ -1,17 +1,29 @@
 #!/Applications/anaconda3/bin/python3
 
+import time
 import socket
 import ciphers
+import threading
 
 s = socket.socket()
 
 host = ""
-port = 3456
+port = int(input("PORT: "))
 
 s.connect((host, port))
+ch = ciphers.CipherHandler()
 
-key = s.recv(1024)
+time.sleep(1)
+
+if s.recv(8).decode() == "GET_KEY:":
+    print("recieved key")
+    public_key = eval(s.recv(1024).decode())
+    ch.public_key = public_key
+
+print(ch.public_key)
 
 while True:
-    text = input("> ")
-    s.send(f"BEGIN-DATA:".encode("utf-8"))
+    text = input('> ')
+
+    ch.encrypt(text)
+    s.send(str(ch.ciphertext).encode())
